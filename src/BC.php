@@ -22,6 +22,7 @@ class BC
     /**
      * @param $method
      * @param $arguments
+     *
      * @return mixed
      * @throws BCNotFoundException
      */
@@ -35,6 +36,11 @@ class BC
         throw new BCNotFoundException(sprintf('Method "%s" not exist', $method));
     }
 
+    /**
+     * @param $hex
+     *
+     * @return int
+     */
     public static function hexdec($hex)
     {
         $hex = (string)$hex;
@@ -52,6 +58,11 @@ class BC
         return $dec;
     }
 
+    /**
+     * @param $dec
+     *
+     * @return string
+     */
     public static function dechex($dec)
     {
         $hex = '';
@@ -63,5 +74,35 @@ class BC
         } while ($dec > 0);
 
         return $hex;
+    }
+
+    /**
+     * @param $base
+     * @param int $scale
+     * @param int $delta
+     *
+     * @return string
+     */
+    public static function round($base, $scale = 0, $delta = 5)
+    {
+        $scaleIncrement = $scale + 1;
+
+        if (!is_string($base))
+        {
+            $base = sprintf("%.{$scaleIncrement}F", $base);
+        }
+
+        $dotPosition = strpos($base, '.');
+
+        if (false !== $dotPosition && (strlen($base) - $dotPosition - 1) > $scale)
+        {
+            $operand = bcdiv($delta, 10 ** $scaleIncrement, $scaleIncrement);
+
+            return bcadd($base, $operand, $scale);
+        }
+        else
+        {
+            return $base;
+        }
     }
 }
