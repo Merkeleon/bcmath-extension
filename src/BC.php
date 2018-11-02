@@ -83,7 +83,7 @@ class BC
      *
      * @return string
      */
-    public static function bcround($base, $scale = 0, $delta = 5)
+    public static function round($base, $scale = 0, $delta = 5)
     {
         $scaleIncrement = $scale + 1;
 
@@ -92,7 +92,9 @@ class BC
             $base = sprintf("%.{$scaleIncrement}F", $base);
         }
 
-        if (false !== ($pos = strpos($base, '.')) && (strlen($base) - $pos - 1) > $scale)
+        $dotPosition = strpos($base, '.');
+
+        if (false !== $dotPosition && (strlen($base) - $dotPosition - 1) > $scale)
         {
             $operand = bcdiv($delta, 10 ** $scaleIncrement, $scaleIncrement);
 
